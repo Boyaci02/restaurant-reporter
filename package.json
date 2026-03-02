@@ -1,0 +1,30 @@
+{
+  "name": "restaurant-reporter",
+  "version": "1.0.0",
+  "description": "Automated monthly PDF report generation and delivery for restaurant customers",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test-customer": "node src/reportRunner.js",
+    "generate-all": "node src/reportRunner.js --all",
+    "test-mail": "node src/mailer.js --test",
+    "add-customer": "node scripts/addCustomer.js",
+    "dashboard": "node src/dashboard.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.3",
+    "axios": "^1.7.9",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "google-auth-library": "^9.15.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^8.0.1",
+    "puppeteer": "^24.37.5",
+    "winston": "^3.17.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

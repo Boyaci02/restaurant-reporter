@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logga in – Restaurant Reporter</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 40px;
+      width: 360px;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 6px;
+    }
+    .sub {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 32px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    input[type=password] {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #f8fafc;
+      font-size: 15px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    input[type=password]:focus { border-color: #6366f1; }
+    .error {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #f87171;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 11px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    button:hover { background: #4f46e5; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">Restaurant Reporter</div>
+    <div class="sub">Admin Dashboard</div>
+    <form method="POST" action="/login">
+      <label for="pw">Lösenord</label>
+      <input type="password" id="pw" name="password" autofocus autocomplete="current-password" />
+      <div id="err" class="error" style="display:none">Fel lösenord. Försök igen.</div>
+      <button type="submit">Logga in</button>
+    </form>
+  </div>
+  <script>
+    if (location.search.includes('error=1')) document.getElementById('err').style.display='block';
+  </script>
+</body>
+</html>

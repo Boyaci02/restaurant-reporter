@@ -1,0 +1,306 @@
+[
+  {
+    "id": "sushi_revolution",
+    "name": "Sushi Revolution",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5497201"
+    },
+    "google": {
+      "location_id": "locations/5727949146951002377"
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "k25",
+    "name": "k25",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5579843"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "mazraa",
+    "name": "Mazra'a",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5580285"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "fluffy_house",
+    "name": "Fluffy House",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5580340"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "brams",
+    "name": "Brams",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5580412"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "tasty_bros",
+    "name": "Tasty Bros",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5580425"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "white_rice",
+    "name": "White Rice",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5595074"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "stekt",
+    "name": "Stekt",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5595085"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "southside",
+    "name": "Southside",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5595114"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "drippn",
+    "name": "Dripp'n",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5595120"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "berra_burras",
+    "name": "Berra Burras",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5595140"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "keb",
+    "name": "KEB",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5595143"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "ostermalms_grillen",
+    "name": "Östermalms grillen",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5595148"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "lets_malatang",
+    "name": "Lets malatang",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5595165"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "falafelbaren",
+    "name": "falafelbaren",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5660181"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "berlin_doner",
+    "name": "Berlin Döner Sverige",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5788921"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "asian_bbq_bistro",
+    "name": "AsianBBQbistro",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5793589"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "dundersmash",
+    "name": "dundersmash",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5814781"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  },
+  {
+    "id": "fullmoonwok",
+    "name": "fullmoonwok",
+    "contact_email": "emanuel@synsnumedia.com",
+    "active": true,
+    "metricool": {
+      "brand_id": "5884219"
+    },
+    "google": {
+      "location_id": ""
+    },
+    "website": {
+      "platform": "",
+      "plausible_domain": ""
+    }
+  }
+]

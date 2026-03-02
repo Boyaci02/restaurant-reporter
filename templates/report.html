@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Månadsrapport – {{CUSTOMER_NAME}}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ig:          #E1306C;
+      --fb:          #1877F2;
+      --tt:          #ff0050;
+      --google:      #4285F4;
+      --ads:         #F59E0B;
+      --web:         #10B981;
+      --ai:          #6366f1;
+
+      --bg:          #F1F5F9;
+      --surface:     #FFFFFF;
+      --border:      #E2E8F0;
+      --border-soft: #F1F5F9;
+      --text-head:   #0F172A;
+      --text-body:   #475569;
+      --text-muted:  #94A3B8;
+      --shadow:      0 1px 3px rgba(15,23,42,0.05), 0 4px 16px rgba(15,23,42,0.06);
+      --radius:      10px;
+      --radius-sm:   6px;
+    }
+
+    body {
+      font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-body);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ──────────────────────────────────────── */
+    .report-header {
+      background: linear-gradient(135deg, #0c1524 0%, #1a2845 50%, #0c1524 100%);
+      padding: 22px 32px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .hdr-left .report-type {
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 5px;
+    }
+
+    .hdr-left .agency-name {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .hdr-left .agency-email {
+      font-size: 10px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 3px;
+    }
+
+    .hdr-right {
+      text-align: right;
+    }
+
+    .hdr-right .cust-label {
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 3px;
+    }
+
+    .hdr-right .cust-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.15;
+    }
+
+    .hdr-right .period-badge {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 10px;
+      background: rgba(99,102,241,0.25);
+      color: #a5b4fc;
+      border: 1px solid rgba(99,102,241,0.35);
+      padding: 2px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-stripe {
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1 0%, #818cf8 40%, #10b981 80%, #f59e0b 100%);
+    }
+
+    /* ── CONTENT AREA ────────────────────────────────── */
+    .content {
+      flex: 1;
+      padding: 20px 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── SECTION CARD ────────────────────────────────── */
+    .section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .section-hdr {
+      background: #F8FAFC;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-head);
+    }
+
+    .section-body {
+      padding: 14px 16px;
+    }
+
+    /* ── PLATFORM PANELS (social) ────────────────────── */
+    .platform-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .platform-split.has-tiktok {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .platform-panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .plat-hdr {
+      padding: 8px 12px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+    }
+
+    .plat-hdr.ig  { background: linear-gradient(120deg, #8a3ab9 0%, #e95950 50%, #fcb045 100%); }
+    .plat-hdr.fb  { background: #1877F2; }
+    .plat-hdr.tt  { background: #111111; }
+
+    .plat-rows { }
+
+    .plat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 12px;
+      border-bottom: 1px solid var(--border-soft);
+      font-size: 11px;
+    }
+
+    .plat-row:last-child { border-bottom: none; }
+
+    .plat-row .lbl { color: var(--text-muted); }
+    .plat-row .val {
+      font-weight: 600;
+      color: var(--text-head);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .plat-row.sub-hdr {
+      background: #F8FAFC;
+      padding: 4px 12px;
+    }
+
+    .plat-row.sub-hdr .lbl {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    /* ── METRIC GRID (scorecards) ────────────────────── */
+    .metric-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .metric-grid.c2 { grid-template-columns: repeat(2, 1fr); }
+    .metric-grid.c3 { grid-template-columns: repeat(3, 1fr); }
+    .metric-grid.c4 { grid-template-columns: repeat(4, 1fr); }
+    .metric-grid.c5 { grid-template-columns: repeat(5, 1fr); }
+    .metric-grid.c6 { grid-template-columns: repeat(6, 1fr); }
+    .metric-grid.c7 { grid-template-columns: repeat(7, 1fr); }
+
+    .mcard {
+      background: #FAFBFC;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 10px 9px;
+      text-align: center;
+      position: relative;
+    }
+
+    .mcard::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    }
+
+    .mcard.ig::after   { background: linear-gradient(90deg, #8a3ab9, #e95950, #fcb045); }
+    .mcard.fb::after   { background: var(--fb); }
+    .mcard.tt::after   { background: var(--tt); }
+    .mcard.google::after { background: var(--google); }
+    .mcard.ads::after  { background: var(--ads); }
+    .mcard.web::after  { background: var(--web); }
+    .mcard.ai::after   { background: var(--ai); }
+    .mcard.neutral::after { background: #CBD5E1; }
+
+    .mcard .mval {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-head);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .mcard .mval.accent  { color: var(--ai); }
+    .mcard .mval.gold    { color: #B45309; }
+    .mcard .mval.google  { color: #1D4ED8; }
+
+    .mcard .mlbl {
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── INLÄGG PER PLATTFORM ────────────────────────── */
+    .posts-platform-block { margin-bottom: 18px; }
+    .posts-platform-block:last-child { margin-bottom: 0; }
+
+    .posts-platform-hdr {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      color: #fff;
+      margin-bottom: 0;
+    }
+    .posts-platform-hdr.fb  { background: var(--fb); }
+    .posts-platform-hdr.ig  { background: linear-gradient(90deg,#833ab4,#fd1d1d,#fcb045); }
+    .posts-platform-hdr.tt  { background: var(--tt); }
+
+    .posts-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      overflow: hidden;
+    }
+    .posts-tbl th {
+      background: #F8FAFC;
+      color: var(--text-muted);
+      padding: 4px 7px;
+      text-align: right;
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+    }
+    .posts-tbl th:first-child,
+    .posts-tbl th:nth-child(2) { text-align: left; }
+    .posts-tbl td {
+      padding: 5px 7px;
+      border-bottom: 1px solid var(--border-soft);
+      color: var(--text-head);
+      text-align: right;
+      vertical-align: middle;
+    }
+    .posts-tbl td:first-child,
+    .posts-tbl td:nth-child(2) { text-align: left; }
+    .posts-tbl tr:last-child td { border-bottom: none; }
+    .posts-tbl tr:nth-child(even) td { background: #FAFBFC; }
+
+    .pt-date { font-size: 8.5px; color: var(--text-muted); white-space: nowrap; }
+    .pt-post  { display: flex; align-items: center; gap: 7px; max-width: 200px; }
+    .pt-thumb {
+      width: 32px; height: 32px;
+      object-fit: cover;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .pt-thumb-ph {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg,#E2E8F0,#CBD5E1);
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .pt-caption {
+      font-size: 9px;
+      color: var(--text-body);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .pt-num { font-weight: 600; }
+
+    /* ── DATA TABLE ──────────────────────────────────── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    .data-table th {
+      background: #F8FAFC;
+      color: var(--text-muted);
+      padding: 5px 10px;
+      text-align: left;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+      padding: 5px 10px;
+      border-bottom: 1px solid var(--border-soft);
+      color: var(--text-head);
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+
+    /* ── AI INSIGHTS ─────────────────────────────────── */
+    .ai-inner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      border: 1px solid rgba(99,102,241,0.15);
+    }
+
+    .ai-kicker {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #818cf8;
+      margin-bottom: 2px;
+    }
+
+    .ai-sub {
+      font-size: 9px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.03em;
+      margin-bottom: 12px;
+    }
+
+    .ai-summary {
+      font-size: 11.5px;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.82);
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      border-left: 2px solid #6366f1;
+    }
+
+    .ai-recs-label {
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 10px;
+    }
+
+    .ai-recs {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ai-recs li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.55;
+    }
+
+    .rec-num {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(99,102,241,0.5);
+      color: #818cf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    /* ── NO DATA ─────────────────────────────────────── */
+    .no-data {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 18px;
+      background: #F8FAFC;
+      border-radius: var(--radius-sm);
+      border: 1px dashed var(--border);
+      font-size: 11px;
+    }
+    .no-data-row { color: var(--text-muted); font-size: 11px; font-style: italic; }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    .report-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    .footer-brand {
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-size: 9px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ────────────────────────────────────────── -->
+  <header class="report-header">
+    <div class="hdr-left">
+      <div class="report-type">Marknadsföringsrapport</div>
+      <div class="agency-name">{{AGENCY_NAME}}</div>
+      <div class="agency-email">{{AGENCY_EMAIL}}</div>
+    </div>
+    <div class="hdr-right">
+      <div class="cust-label">Kund</div>
+      <div class="cust-name">{{CUSTOMER_NAME}}</div>
+      <div class="period-badge">{{REPORT_MONTH}} {{REPORT_YEAR}}</div>
+    </div>
+  </header>
+  <div class="header-stripe"></div>
+
+  <!-- ── CONTENT ───────────────────────────────────────── -->
+  <div class="content">
+
+    <!-- ── 1. SOCIALA MEDIER ─────────────────────────── -->
+    <section class="section">
+      <div class="section-hdr">
+        <div class="section-dot" style="background:var(--ig);"></div>
+        <h2 class="section-title">Sociala Medier</h2>
+      </div>
+      <div class="section-body">
+        {{#IF_SOCIAL}}
+        <div class="platform-split">
+
+          <!-- Instagram -->
+          <div class="platform-panel">
+            <div class="plat-hdr ig">📸 &nbsp;Instagram</div>
+            {{#IF_IG_STORIES_ONLY}}<div style="font-size:9px;color:#888;padding:4px 10px 0;font-style:italic;">Räckvidd baseras på stories (Professional account krävs för inläggsdata)</div>{{/IF_IG_STORIES_ONLY}}
+            <div class="plat-rows">
+              <div class="plat-row"><span class="lbl">Räckvidd</span><span class="val">{{IG_REACH}}</span></div>
+              <div class="plat-row"><span class="lbl">Impressions</span><span class="val">{{IG_IMPRESSIONS}}</span></div>
+              <div class="plat-row"><span class="lbl">Engagemang</span><span class="val">{{IG_ENGAGEMENT}}</span></div>
+              <div class="plat-row"><span class="lbl">Likes</span><span class="val">{{IG_LIKES}}</span></div>
+              <div class="plat-row"><span class="lbl">Kommentarer</span><span class="val">{{IG_COMMENTS}}</span></div>
+              <div class="plat-row"><span class="lbl">Sparade</span><span class="val">{{IG_SAVES}}</span></div>
+              <div class="plat-row"><span class="lbl">Nya följare</span><span class="val">+{{IG_FOLLOWER_GROWTH}}</span></div>
+              {{#IF_IG_STORIES}}
+              <div class="plat-row sub-hdr"><span class="lbl">Stories &middot; {{IG_STORIES_COUNT}} st</span></div>
+              <div class="plat-row"><span class="lbl">Visningar</span><span class="val">{{IG_STORIES_IMPRESSIONS}}</span></div>
+              <div class="plat-row"><span class="lbl">Räckvidd</span><span class="val">{{IG_STORIES_REACH}}</span></div>
+              <div class="plat-row"><span class="lbl">Svar</span><span class="val">{{IG_STORIES_REPLIES}}</span></div>
+              {{/IF_IG_STORIES}}
+            </div>
+          </div>
+
+          <!-- Facebook -->
+          {{#IF_FB}}
+          <div class="platform-panel">
+            <div class="plat-hdr fb">&#128241; &nbsp;Facebook</div>
+            <div class="plat-rows">
+              <div class="plat-row"><span class="lbl">Räckvidd</span><span class="val">{{FB_REACH}}</span></div>
+              <div class="plat-row"><span class="lbl">Impressions</span><span class="val">{{FB_IMPRESSIONS}}</span></div>
+              <div class="plat-row"><span class="lbl">Engagemang</span><span class="val">{{FB_ENGAGEMENT}}</span></div>
+              <div class="plat-row"><span class="lbl">Nya följare</span><span class="val">+{{FB_FOLLOWER_GROWTH}}</span></div>
+              <div class="plat-row"><span class="lbl">Likes</span><span class="val">{{FB_LIKES}}</span></div>
+              <div class="plat-row"><span class="lbl">Kommentarer</span><span class="val">{{FB_COMMENTS}}</span></div>
+              <div class="plat-row"><span class="lbl">Delningar</span><span class="val">{{FB_SHARES}}</span></div>
+            </div>
+          </div>
+          {{/IF_FB}}
+          {{#ELSE_FB}}
+          <div class="platform-panel">
+            <div class="plat-hdr fb">&#128241; &nbsp;Facebook</div>
+            <div class="plat-rows">
+              <div class="plat-row no-data-row"><span class="lbl">Inga publicerade inlägg denna månad</span></div>
+            </div>
+          </div>
+          {{/ELSE_FB}}
+
+          {{#IF_TIKTOK}}
+          <!-- TikTok -->
+          <div class="platform-panel">
+            <div class="plat-hdr tt">&#127925; &nbsp;TikTok</div>
+            <div class="plat-rows">
+              <div class="plat-row"><span class="lbl">Videovisningar</span><span class="val">{{TT_VIDEO_VIEWS}}</span></div>
+              <div class="plat-row"><span class="lbl">Räckvidd</span><span class="val">{{TT_REACH}}</span></div>
+              <div class="plat-row"><span class="lbl">Engagemang</span><span class="val">{{TT_ENGAGEMENT}}</span></div>
+              <div class="plat-row"><span class="lbl">Likes</span><span class="val">{{TT_LIKES}}</span></div>
+              <div class="plat-row"><span class="lbl">Kommentarer</span><span class="val">{{TT_COMMENTS}}</span></div>
+              <div class="plat-row"><span class="lbl">Delningar</span><span class="val">{{TT_SHARES}}</span></div>
+              <div class="plat-row"><span class="lbl">Nya följare</span><span class="val">+{{TT_FOLLOWER_GROWTH}}</span></div>
+              <div class="plat-row"><span class="lbl">Totalt följare</span><span class="val">{{TT_TOTAL_FOLLOWERS}}</span></div>
+            </div>
+          </div>
+          {{/IF_TIKTOK}}
+
+        </div>
+        {{/IF_SOCIAL}}
+        {{#ELSE_SOCIAL}}
+        <p class="no-data">Data ej tillgänglig denna månad</p>
+        {{/ELSE_SOCIAL}}
+      </div>
+    </section>
+
+    <!-- ── 2. BÄSTA INLÄGG ───────────────────────────── -->
+    <section class="section">
+      <div class="section-hdr">
+        <div class="section-dot" style="background:var(--fb);"></div>
+        <h2 class="section-title">Inlägg denna månad</h2>
+      </div>
+      <div class="section-body">
+        {{#IF_POSTS}}
+
+        {{#IF_FB_POSTS}}
+        <div class="posts-platform-block">
+          <div class="posts-platform-hdr fb">&#128241;&nbsp; Facebook</div>
+          <table class="posts-tbl">
+            <thead><tr>
+              <th>Datum</th><th>Inlägg</th><th>Räckvidd</th><th>Impressions</th><th>Reaktioner</th><th>Komm.</th><th>Delningar</th><th>Eng.%</th>
+            </tr></thead>
+            <tbody>{{FB_POSTS_TABLE}}</tbody>
+          </table>
+        </div>
+        {{/IF_FB_POSTS}}
+
+        {{#IF_IG_POSTS}}
+        <div class="posts-platform-block">
+          <div class="posts-platform-hdr ig">&#128247;&nbsp; Instagram</div>
+          <table class="posts-tbl">
+            <thead><tr>
+              <th>Datum</th><th>Inlägg</th><th>Räckvidd</th><th>Impressions</th><th>Likes</th><th>Komm.</th><th>Sparade</th><th>Eng.%</th>
+            </tr></thead>
+            <tbody>{{IG_POSTS_TABLE}}</tbody>
+          </table>
+        </div>
+        {{/IF_IG_POSTS}}
+
+        {{#IF_TT_POSTS}}
+        <div class="posts-platform-block">
+          <div class="posts-platform-hdr tt">&#127925;&nbsp; TikTok</div>
+          <table class="posts-tbl">
+            <thead><tr>
+              <th>Datum</th><th>Inlägg</th><th>Visningar</th><th>Räckvidd</th><th>Likes</th><th>Komm.</th><th>Delningar</th><th>Eng.%</th>
+            </tr></thead>
+            <tbody>{{TT_POSTS_TABLE}}</tbody>
+          </table>
+        </div>
+        {{/IF_TT_POSTS}}
+
+        {{/IF_POSTS}}
+        {{#ELSE_POSTS}}
+        <p class="no-data">Data ej tillgänglig denna månad</p>
+        {{/ELSE_POSTS}}
+      </div>
+    </section>
+
+    <!-- ── 3. META ADS ───────────────────────────────── -->
+    <section class="section">
+      <div class="section-hdr">
+        <div class="section-dot" style="background:var(--ads);"></div>
+        <h2 class="section-title">Meta Ads</h2>
+      </div>
+      <div class="section-body">
+        {{#IF_ADS}}
+        <div class="metric-grid c4">
+          <div class="mcard ads">
+            <div class="mval">{{ADS_SPEND}}</div>
+            <div class="mlbl">Budget ({{ADS_CURRENCY}})</div>
+          </div>
+          <div class="mcard ads">
+            <div class="mval">{{ADS_REACH}}</div>
+            <div class="mlbl">Räckvidd</div>
+          </div>
+          <div class="mcard ads">
+            <div class="mval">{{ADS_CLICKS}}</div>
+            <div class="mlbl">Klick</div>
+          </div>
+          <div class="mcard ads">
+            <div class="mval accent">{{ADS_ROAS}}</div>
+            <div class="mlbl">ROAS</div>
+          </div>
+        </div>
+        {{/IF_ADS}}
+        {{#ELSE_ADS}}
+        <p class="no-data">Data ej tillgänglig denna månad</p>
+        {{/ELSE_ADS}}
+      </div>
+    </section>
+
+    <!-- ── 4. GOOGLE BUSINESS ────────────────────────── -->
+    <section class="section">
+      <div class="section-hdr">
+        <div class="section-dot" style="background:var(--google);"></div>
+        <h2 class="section-title">Google Business</h2>
+      </div>
+      <div class="section-body">
+        {{#IF_GOOGLE}}
+        <div class="metric-grid c4" style="margin-bottom:8px;">
+          <div class="mcard google">
+            <div class="mval google">{{G_IMPRESSIONS_SEARCH}}</div>
+            <div class="mlbl">Sökvisningar</div>
+          </div>
+          <div class="mcard google">
+            <div class="mval google">{{G_IMPRESSIONS_MAPS}}</div>
+            <div class="mlbl">Maps­visningar</div>
+          </div>
+          <div class="mcard google">
+            <div class="mval google">{{G_WEBSITE_CLICKS}}</div>
+            <div class="mlbl">Webb­klick</div>
+          </div>
+          <div class="mcard google">
+            <div class="mval google">{{G_PHONE_CALLS}}</div>
+            <div class="mlbl">Telefonsamtal</div>
+          </div>
+        </div>
+        <div class="metric-grid c3">
+          <div class="mcard google">
+            <div class="mval google">{{G_DIRECTIONS}}</div>
+            <div class="mlbl">Vägbeskrivningar</div>
+          </div>
+          <div class="mcard google">
+            <div class="mval google">{{G_PHOTO_VIEWS}}</div>
+            <div class="mlbl">Fotovisningar</div>
+          </div>
+          <div class="mcard google">
+            <div class="mval gold">{{G_AVG_RATING}} &#9733;</div>
+            <div class="mlbl">Snittbetyg ({{G_TOTAL_REVIEWS}} rec.)</div>
+          </div>
+        </div>
+        {{/IF_GOOGLE}}
+        {{#ELSE_GOOGLE}}
+        <p class="no-data">Data ej tillgänglig denna månad</p>
+        {{/ELSE_GOOGLE}}
+      </div>
+    </section>
+
+    <!-- ── 5. HEMSIDA ────────────────────────────────── -->
+    <section class="section">
+      <div class="section-hdr">
+        <div class="section-dot" style="background:var(--web);"></div>
+        <h2 class="section-title">Hemsida</h2>
+      </div>
+      <div class="section-body">
+        {{#IF_WEBSITE}}
+        <div class="metric-grid c4" style="margin-bottom:12px;">
+          <div class="mcard web">
+            <div class="mval">{{WEB_VISITORS}}</div>
+            <div class="mlbl">Unika besökare</div>
+          </div>
+          <div class="mcard web">
+            <div class="mval">{{WEB_PAGEVIEWS}}</div>
+            <div class="mlbl">Sidvisningar</div>
+          </div>
+          <div class="mcard web">
+            <div class="mval">{{WEB_BOUNCE_RATE}}%</div>
+            <div class="mlbl">Avvisnings­frekvens</div>
+          </div>
+          <div class="mcard web">
+            <div class="mval">{{WEB_DURATION}}s</div>
+            <div class="mlbl">Snitt besökstid</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-muted);margin-bottom:6px;">Trafikkällor (topp 5)</div>
+            <table class="data-table">
+              <thead><tr><th>Källa</th><th>Besökare</th></tr></thead>
+              <tbody>{{WEB_SOURCES_ROWS}}</tbody>
+            </table>
+          </div>
+          <div>
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-muted);margin-bottom:6px;">Populäraste sidor (topp 5)</div>
+            <table class="data-table">
+              <thead><tr><th>Sida</th><th>Besökare</th></tr></thead>
+              <tbody>{{WEB_PAGES_ROWS}}</tbody>
+            </table>
+          </div>
+        </div>
+        {{/IF_WEBSITE}}
+        {{#ELSE_WEBSITE}}
+        <p class="no-data">Data ej tillgänglig denna månad</p>
+        {{/ELSE_WEBSITE}}
+      </div>
+    </section>
+
+    <!-- ── 6. AI-INSIKTER ────────────────────────────── -->
+    <section class="section">
+      <div class="section-hdr">
+        <div class="section-dot" style="background:var(--ai);"></div>
+        <h2 class="section-title">AI&#8209;insikter</h2>
+      </div>
+      <div class="section-body">
+        <div class="ai-inner">
+          <div class="ai-kicker">Sammanfattning</div>
+          <div class="ai-sub">Genererat av Claude AI &middot; Anthropic</div>
+          <div class="ai-summary">{{AI_SUMMARY}}</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ── FOOTER ────────────────────────────────────────── -->
+  <footer class="report-footer">
+    <div><span class="footer-brand">{{AGENCY_NAME}}</span> &middot; {{AGENCY_EMAIL}}</div>
+    <div>Rapport genererad automatiskt &middot; {{REPORT_MONTH}} {{REPORT_YEAR}}</div>
+  </footer>
+
+</div>
+</body>
+</html>
