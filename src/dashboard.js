@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import axios from 'axios';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CUSTOMERS_PATH = path.join(__dirname, '..', 'data', 'customers.json');
@@ -91,6 +92,44 @@ app.post('/api/customers', requireAuth, async (req, res) => {
   customers.push(newCustomer);
   await fs.writeFile(CUSTOMERS_PATH, JSON.stringify(customers, null, 2), 'utf-8');
   res.status(201).json(newCustomer);
+});
+
+// ── API: Metricool brands ─────────────────────────────────
+app.get('/api/metricool/brands', requireAuth, async (_req, res) => {
+  const apiKey = process.env.METRICOOL_API_KEY;
+  const userId = process.env.METRICOOL_USER_ID;
+  if (!apiKey || !userId) {
+    return res.status(500).json({ error: 'METRICOOL_API_KEY eller METRICOOL_USER_ID saknas' });
+  }
+
+  const mcRes = await axios.get('https://app.metricool.com/api/admin/simpleProfiles', {
+    headers: { 'X-Mc-Auth': apiKey },
+    params: { userId }
+  });
+
+  const raw = await fs.readFile(CUSTOMERS_PATH, 'utf-8');
+  const customers = JSON.parse(raw);
+  const addedBrandIds = new Set(customers.map(c => String(c.metricool?.brand_id)));
+
+  const brands = (mcRes.data?.brands || mcRes.data?.profiles || mcRes.data || [])
+    .map(b => {
+      const gmb = b.gmb ?? null;
+      const locationId = gmb ? 'locations/' + gmb.split('/locations/')[1] : '';
+      return {
+        id:            String(b.id),
+        label:         b.label || '(inget namn)',
+        instagram:     !!b.instagram,
+        facebook:      !!b.facebook,
+        tiktok:        !!b.tiktok,
+        linkedin:      !!b.linkedinCompany,
+        youtube:       !!b.youtube,
+        google:        !!gmb,
+        location_id:   locationId,
+        already_added: addedBrandIds.has(String(b.id))
+      };
+    });
+
+  res.json(brands);
 });
 
 // ── API: delivery status ──────────────────────────────────
