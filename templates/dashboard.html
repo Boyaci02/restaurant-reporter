@@ -4,474 +4,182 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Restaurant Reporter – Admin</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg:       #ffffff;
-      --surface:  #f8fafc;
-      --border:   #e2e8f0;
-      --border-2: #cbd5e1;
-      --accent:   #2563eb;
-      --accent-h: #1d4ed8;
-      --success:  #16a34a;
-      --danger:   #dc2626;
-      --warning:  #d97706;
-      --text-1:   #0f172a;
-      --text-2:   #475569;
-      --text-3:   #94a3b8;
-      --radius:   8px;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text-1);
-      min-height: 100vh;
-      font-size: 13px;
-    }
-
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-    /* ── Header ── */
-    header {
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      height: 56px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .logo-wrap { display: flex; align-items: center; gap: 8px; }
-    .logo-dot {
-      width: 28px; height: 28px; background: var(--accent);
-      border-radius: 7px; display: flex; align-items: center; justify-content: center;
-      font-size: 14px; flex-shrink: 0;
-    }
-    .logo-text { font-size: 14px; font-weight: 700; color: var(--text-1); }
-    .logo-sub  { font-size: 11px; color: var(--text-3); font-weight: 400; margin-left: 4px; }
-    .logout-btn {
-      font-size: 12px; color: var(--text-2); text-decoration: none;
-      padding: 5px 12px; border-radius: var(--radius);
-      border: 1px solid var(--border); font-weight: 500;
-      transition: all .15s;
-    }
-    .logout-btn:hover { border-color: var(--border-2); color: var(--text-1); }
-
-    /* ── Page ── */
-    .page { padding: 20px 24px; }
-
-    /* ── Toolbar ── */
-    .toolbar {
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 16px; flex-wrap: wrap;
-    }
-    .search-wrap { position: relative; flex: 1; min-width: 180px; max-width: 280px; }
-    .search-wrap svg {
-      position: absolute; left: 9px; top: 50%; transform: translateY(-50%);
-      width: 14px; height: 14px; color: var(--text-3); pointer-events: none;
-    }
-    .search-input {
-      width: 100%; background: #fff; border: 1px solid var(--border);
-      border-radius: var(--radius); color: var(--text-1);
-      font-size: 13px; font-family: inherit;
-      padding: 7px 10px 7px 30px; outline: none; transition: border-color .15s;
-    }
-    .search-input::placeholder { color: var(--text-3); }
-    .search-input:focus { border-color: var(--accent); }
-
-    select.filter-select {
-      background: #fff; border: 1px solid var(--border);
-      border-radius: var(--radius); color: var(--text-2);
-      font-size: 13px; font-family: inherit;
-      padding: 7px 10px; outline: none; cursor: pointer; transition: border-color .15s;
-    }
-    select.filter-select:focus { border-color: var(--accent); }
-
-    .toolbar-right { margin-left: auto; }
-
-    button.btn-primary {
-      background: var(--accent); color: #fff;
-      border: none; border-radius: var(--radius);
-      font-size: 13px; font-weight: 600; font-family: inherit;
-      padding: 7px 14px; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 6px;
-      transition: background .15s; white-space: nowrap;
-    }
-    button.btn-primary:hover { background: var(--accent-h); }
-    button.btn-primary:disabled { opacity: .4; cursor: default; }
-
-    /* ── Meta bar ── */
-    .meta-bar {
-      display: flex; align-items: center; flex-wrap: wrap; gap: 16px;
-      margin-bottom: 12px;
-    }
-    .meta-count { font-size: 12px; color: var(--text-2); }
-    .meta-count strong { color: var(--text-1); font-weight: 600; }
-    .legend { display: flex; align-items: center; gap: 14px; margin-left: auto; }
-    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-2); }
-    .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .legend-dot.ok      { background: var(--success); }
-    .legend-dot.fail    { background: var(--danger); }
-    .legend-dot.pending { background: var(--warning); }
-    .legend-dot.future  { background: var(--text-3); }
-
-    /* ── Table ── */
-    .table-wrap {
-      width: 100%; border: 1px solid var(--border);
-      border-radius: 10px; overflow: hidden;
-    }
-    table {
-      width: 100%; border-collapse: collapse; font-size: 13px;
-      table-layout: auto;
-    }
-
-    thead th {
-      background: var(--surface);
-      color: var(--text-2); font-weight: 600; font-size: 11px;
-      letter-spacing: .4px; text-transform: uppercase;
-      padding: 10px 14px; text-align: left;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-    thead th.sortable { cursor: pointer; user-select: none; }
-    thead th.sortable:hover { color: var(--text-1); }
-    thead th.month-col { text-align: center; min-width: 70px; }
-
-    tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--surface); }
-    tbody td { padding: 12px 14px; vertical-align: middle; }
-    tbody td.month-col { text-align: center; padding: 12px 8px; }
-
-    .customer-name { font-weight: 600; color: var(--text-1); font-size: 13px; }
-    .customer-slug { font-size: 11px; color: var(--text-3); margin-top: 2px; font-family: 'Courier New', monospace; }
-
-    /* ── Email cell ── */
-    .email-cell { display: flex; align-items: center; gap: 6px; min-width: 0; }
-    .email-text {
-      color: var(--text-2); overflow: hidden; text-overflow: ellipsis;
-      white-space: nowrap; max-width: 220px;
-    }
-    .email-edit-btn {
-      flex-shrink: 0; background: none; border: none; cursor: pointer;
-      color: var(--text-3); padding: 2px; border-radius: 4px;
-      display: flex; align-items: center; transition: color .15s; opacity: 0;
-    }
-    tbody tr:hover .email-edit-btn { opacity: 1; }
-    .email-edit-btn:hover { color: var(--accent); }
-    .email-edit-btn svg { width: 13px; height: 13px; }
-    .email-input {
-      background: #fff; border: 1px solid var(--accent);
-      border-radius: 6px; color: var(--text-1);
-      font-size: 13px; font-family: inherit;
-      padding: 4px 8px; width: 200px; outline: none; display: none;
-    }
-    .email-save-btn {
-      font-size: 11px; padding: 3px 8px; font-family: inherit;
-      background: var(--success); color: #fff;
-      border: none; border-radius: 5px; cursor: pointer; display: none; flex-shrink: 0;
-    }
-
-    /* ── Active pill ── */
-    .active-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11px; font-weight: 600;
-      padding: 3px 10px; border-radius: 20px; cursor: pointer;
-      border: none; font-family: inherit; transition: all .15s; white-space: nowrap;
-    }
-    .active-pill.on  { background: #dcfce7; color: #15803d; }
-    .active-pill.off { background: #fee2e2; color: #b91c1c; }
-    .active-pill::before { content: '●'; font-size: 7px; position: relative; top: .5px; }
-
-    /* ── Status pills ── */
-    .status-pill {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 11px; font-weight: 600;
-      padding: 3px 9px; border-radius: 20px; white-space: nowrap;
-    }
-    .status-pill.ok      { background: #dcfce7; color: #15803d; }
-    .status-pill.fail    { background: #fee2e2; color: #b91c1c; }
-    .status-pill.pending { background: #fef3c7; color: #b45309; }
-    .status-pill::before { content: '●'; font-size: 7px; position: relative; top: .5px; }
-    .status-dash { color: var(--text-3); font-size: 15px; }
-
-    /* ── Modal ── */
-    .overlay {
-      display: none; position: fixed; inset: 0;
-      background: #0f172a55; z-index: 200;
-      align-items: center; justify-content: center; padding: 16px;
-    }
-    .overlay.open { display: flex; }
-    .modal {
-      background: #fff; border: 1px solid var(--border);
-      border-radius: 12px; width: 100%; max-width: 480px;
-      max-height: 90vh; display: flex; flex-direction: column;
-      overflow: hidden; box-shadow: 0 20px 40px #0f172a18;
-    }
-    .modal-header {
-      padding: 20px 24px 0;
-      display: flex; align-items: flex-start; justify-content: space-between;
-      flex-shrink: 0;
-    }
-    .modal-header h2 { font-size: 16px; font-weight: 700; color: var(--text-1); }
-    .modal-step-label { font-size: 11px; color: var(--text-3); margin-top: 3px; }
-    .modal-close {
-      background: none; border: none; cursor: pointer; color: var(--text-3);
-      padding: 4px; border-radius: 6px; display: flex; flex-shrink: 0;
-      margin-left: 12px; transition: color .15s;
-    }
-    .modal-close:hover { color: var(--text-1); }
-    .modal-close svg { width: 16px; height: 16px; }
-    .modal-body { padding: 16px 24px 20px; overflow-y: auto; flex: 1; }
-
-    /* Brand browser */
-    .brand-search {
-      width: 100%; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); color: var(--text-1);
-      font-size: 13px; font-family: inherit;
-      padding: 8px 12px; outline: none; margin-bottom: 10px; transition: border-color .15s;
-    }
-    .brand-search:focus { border-color: var(--accent); }
-    .brand-list {
-      max-height: 320px; overflow-y: auto;
-      border: 1px solid var(--border); border-radius: var(--radius);
-    }
-    .brand-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; cursor: pointer;
-      border-bottom: 1px solid var(--border); transition: background .1s;
-      background: #fff;
-    }
-    .brand-item:last-child { border-bottom: none; }
-    .brand-item:hover:not(.already) { background: var(--surface); }
-    .brand-item.selected { background: #eff6ff; }
-    .brand-item.already  { opacity: .4; cursor: default; }
-    .brand-item-name {
-      font-weight: 600; font-size: 13px; color: var(--text-1);
-      flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .brand-item-nets { display: flex; gap: 3px; flex-shrink: 0; }
-    .net-icon { font-size: 13px; line-height: 1; }
-    .brand-item-badge {
-      font-size: 10px; font-weight: 600; color: var(--text-3);
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 4px; padding: 2px 6px; flex-shrink: 0; white-space: nowrap;
-    }
-    .brand-loading { padding: 24px; text-align: center; color: var(--text-3); font-size: 13px; }
-
-    /* Step 2 */
-    .field { margin-bottom: 14px; }
-    .field label {
-      display: block; font-size: 11px; font-weight: 600; color: var(--text-2);
-      margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px;
-    }
-    .field input {
-      width: 100%; background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); color: var(--text-1);
-      font-size: 13px; font-family: inherit;
-      padding: 8px 12px; outline: none; transition: border-color .15s;
-    }
-    .field input:focus { border-color: var(--accent); }
-    .field input[readonly] { color: var(--text-2); cursor: default; }
-    .field .hint { font-size: 11px; color: var(--text-3); margin-top: 4px; }
-    .selected-brand-info {
-      display: flex; align-items: center; gap: 8px;
-      background: #eff6ff; border: 1px solid #bfdbfe;
-      border-radius: var(--radius); padding: 10px 12px; margin-bottom: 16px;
-    }
-    .sbi-name { font-weight: 600; font-size: 13px; color: var(--text-1); }
-    .sbi-id   { font-size: 11px; color: var(--text-3); font-family: 'Courier New', monospace; margin-top: 2px; }
-    .modal-error { font-size: 12px; color: var(--danger); margin-top: 8px; display: none; }
-
-    .modal-footer {
-      padding: 14px 24px; border-top: 1px solid var(--border);
-      display: flex; gap: 8px; justify-content: flex-end; flex-shrink: 0;
-    }
-    button.btn-secondary {
-      background: var(--surface); color: var(--text-1);
-      border: 1px solid var(--border); border-radius: var(--radius);
-      font-size: 13px; font-weight: 600; font-family: inherit;
-      padding: 7px 14px; cursor: pointer; transition: all .15s;
-    }
-    button.btn-secondary:hover { border-color: var(--border-2); }
-
-    /* ── Toast ── */
-    #toast {
-      position: fixed; bottom: 24px; right: 24px;
-      background: var(--text-1); color: #fff;
-      border-radius: var(--radius); padding: 10px 18px;
-      font-size: 13px; font-weight: 600;
-      display: none; z-index: 300; pointer-events: none;
-      box-shadow: 0 4px 12px #0f172a33;
-    }
-    #toast.error { background: var(--danger); }
-
-    /* ── Empty state ── */
-    .empty-state {
-      padding: 48px 24px; text-align: center; color: var(--text-3); display: none;
-      background: #fff;
-    }
-    .empty-state p { margin-top: 6px; font-size: 12px; }
-
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
-      .col-hide-md { display: none; }
-      .legend { display: none; }
-    }
-    @media (max-width: 600px) {
-      .page { padding: 16px; }
-      header { padding: 0 16px; }
-      .col-hide-sm { display: none; }
-      .toolbar-right { width: 100%; }
-      button.btn-primary { width: 100%; justify-content: center; }
-      .search-wrap { max-width: 100%; flex: 1 1 100%; }
-    }
-  </style>
+  <link rel="stylesheet" href="/styles/tokens.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/components.css" />
+  <link rel="stylesheet" href="/styles/admin.css" />
 </head>
-<body>
+<body class="app">
 
-<header>
-  <div class="logo-wrap">
-    <div class="logo-dot" aria-hidden="true">🍽</div>
-    <span class="logo-text">Restaurant Reporter <span class="logo-sub">Admin</span></span>
+<header class="header">
+  <div class="header__brand">
+    <div class="header__icon" aria-hidden="true">🍽</div>
+    <span class="header__title">Restaurant Reporter<span class="header__sub">Admin</span></span>
   </div>
-  <a href="/logout" class="logout-btn">Logga ut</a>
+  <a href="/logout" class="btn btn--ghost" style="height:36px;font-size:13px;" aria-label="Logga ut">Logga ut</a>
 </header>
 
-<div class="page">
-  <!-- Toolbar -->
-  <div class="toolbar">
-    <div class="search-wrap">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 3.5 3.5"/>
-      </svg>
-      <input class="search-input" id="search" type="search"
-        placeholder="Sök kund eller e-post…" aria-label="Sök kund" />
-    </div>
-    <select class="filter-select" id="filter" aria-label="Filtrera">
-      <option value="all">Alla kunder</option>
-      <option value="active">Aktiva</option>
-      <option value="inactive">Inaktiva</option>
-    </select>
-    <div class="toolbar-right">
-      <button class="btn-primary" onclick="openModal()">
-        <svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor" aria-hidden="true">
-          <path d="M5.5 0v11M0 5.5h11"/>
+<main class="main">
+  <div class="container">
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="controls__search">
+        <svg class="controls__search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 3.5 3.5"/>
         </svg>
-        Lägg till kund
+        <input class="input input--search" id="search" type="search"
+          placeholder="Sök kund eller e-post…" aria-label="Sök kund" />
+      </div>
+      <select class="select" id="filter" aria-label="Filtrera på aktiv-status">
+        <option value="all">Alla kunder</option>
+        <option value="active">Aktiva</option>
+        <option value="inactive">Inaktiva</option>
+      </select>
+      <div class="controls__cta">
+        <button class="btn btn--primary" onclick="openModal()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+            <path d="M6 0v12M0 6h12"/>
+          </svg>
+          Lägg till kund
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <span class="summary__text" id="meta-count"></span>
+      <div class="legend" role="note" aria-label="Förklaring av statusfärger">
+        <span class="legend__item"><span class="legend__dot" style="background:var(--success-fg)"></span>Levererad</span>
+        <span class="legend__item"><span class="legend__dot" style="background:var(--danger-fg)"></span>Misslyckad</span>
+        <span class="legend__item"><span class="legend__dot" style="background:var(--warning-fg)"></span>Väntar</span>
+        <span class="legend__item"><span class="legend__dot" style="background:var(--muted)"></span>Framtida</span>
+      </div>
+    </div>
+
+    <!-- Status filter chips -->
+    <div class="chips" role="group" aria-label="Filtrera på leveransstatus">
+      <button class="chip active" data-status="all"     onclick="setStatusFilter('all')">Alla</button>
+      <button class="chip"        data-status="ok"      onclick="setStatusFilter('ok')">
+        <span class="chip__dot" style="background:var(--success-fg)"></span>Levererad
+      </button>
+      <button class="chip"        data-status="fail"    onclick="setStatusFilter('fail')">
+        <span class="chip__dot" style="background:var(--danger-fg)"></span>Misslyckad
+      </button>
+      <button class="chip"        data-status="pending" onclick="setStatusFilter('pending')">
+        <span class="chip__dot" style="background:var(--warning-fg)"></span>Väntar
+      </button>
+      <button class="chip"        data-status="future"  onclick="setStatusFilter('future')">
+        <span class="chip__dot" style="background:var(--muted)"></span>Framtida
       </button>
     </div>
-  </div>
 
-  <!-- Meta -->
-  <div class="meta-bar">
-    <span class="meta-count" id="meta-count"></span>
-    <div class="legend" role="note">
-      <span class="legend-item"><span class="legend-dot ok"></span>Levererad</span>
-      <span class="legend-item"><span class="legend-dot fail"></span>Misslyckad</span>
-      <span class="legend-item"><span class="legend-dot pending"></span>Väntar</span>
-      <span class="legend-item"><span class="legend-dot future"></span>Framtida</span>
+    <!-- Table card -->
+    <div class="card table-card">
+      <table class="table" id="tbl" aria-label="Kundöversikt">
+        <thead>
+          <tr>
+            <th class="th--sortable" id="th-name" onclick="sortByName()" aria-sort="none">Kund</th>
+            <th class="col-hide-sm">E-post</th>
+            <th>Status</th>
+            <th id="h0" class="th--center"></th>
+            <th id="h1" class="th--center"></th>
+            <th id="h2" class="th--center"></th>
+            <th id="h3" class="th--center col-hide-md"></th>
+            <th id="h4" class="th--center col-hide-md"></th>
+            <th id="h5" class="th--center col-hide-md"></th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="empty-state" id="empty-state" role="status">
+        <div class="empty-state__title">Inga kunder matchar</div>
+        <div class="empty-state__desc">Prova ett annat sökord eller återställ filtret.</div>
+      </div>
     </div>
-  </div>
 
-  <!-- Table -->
-  <div class="table-wrap">
-    <table id="tbl" aria-label="Kundöversikt">
-      <thead>
-        <tr>
-          <th class="sortable" id="th-name" onclick="sortByName()" aria-sort="none">Kund</th>
-          <th class="col-hide-sm">E-post</th>
-          <th>Status</th>
-          <th id="h0" class="month-col"></th>
-          <th id="h1" class="month-col"></th>
-          <th id="h2" class="month-col"></th>
-          <th id="h3" class="month-col col-hide-md"></th>
-          <th id="h4" class="month-col col-hide-md"></th>
-          <th id="h5" class="month-col col-hide-md"></th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-    <div class="empty-state" id="empty-state" role="status">
-      <strong>Inga kunder matchar</strong>
-      <p>Prova ett annat sökord eller återställ filtret.</p>
-    </div>
   </div>
-</div>
+</main>
 
 <!-- Modal -->
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-  <div class="modal">
-    <div class="modal-header">
+  <div class="dialog" id="dialog">
+    <div class="dialog__header">
       <div>
-        <h2 id="modal-title">Lägg till kund</h2>
-        <div class="modal-step-label" id="step-label">Steg 1 av 2 — Välj Metricool-konto</div>
+        <h2 class="dialog__title" id="modal-title">Lägg till kund</h2>
+        <div class="dialog__step" id="step-label">Steg 1 av 2 — Välj Metricool-konto</div>
       </div>
-      <button class="modal-close" onclick="closeModal()" aria-label="Stäng">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <button class="btn--icon" onclick="closeModal()" aria-label="Stäng dialog">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M2 2l12 12M14 2L2 14"/>
         </svg>
       </button>
     </div>
 
-    <!-- Step 1 -->
-    <div class="modal-body" id="step1">
-      <input class="brand-search" id="brand-search" type="search"
-        placeholder="Sök Metricool-konto…" aria-label="Sök konton" oninput="filterBrands()" />
+    <div class="dialog__progress" aria-hidden="true">
+      <div class="dialog__progress-bar" id="progress-bar" style="width:50%"></div>
+    </div>
+
+    <!-- Step 1: choose Metricool account -->
+    <div class="dialog__body" id="step1">
+      <input class="input" id="brand-search" type="search"
+        placeholder="Sök Metricool-konto…" aria-label="Sök Metricool-konton" oninput="filterBrands()" />
       <div class="brand-list" id="brand-list" role="listbox" aria-label="Metricool-konton">
         <div class="brand-loading">Hämtar konton från Metricool…</div>
       </div>
     </div>
 
-    <!-- Step 2 -->
-    <div class="modal-body" id="step2" style="display:none">
-      <div class="selected-brand-info">
+    <!-- Step 2: contact details -->
+    <div class="dialog__body" id="step2" style="display:none">
+      <div class="selected-brand-card">
         <div>
-          <div class="sbi-name" id="sbi-name"></div>
-          <div class="sbi-id" id="sbi-id"></div>
+          <div class="selected-brand-card__name" id="sbi-name"></div>
+          <div class="selected-brand-card__id"   id="sbi-id"></div>
         </div>
       </div>
       <div class="field">
-        <label for="f-name">Restaurangens namn</label>
-        <input id="f-name" readonly />
+        <label class="field__label" for="f-name">Restaurangens namn</label>
+        <input class="input" id="f-name" readonly />
       </div>
       <div class="field">
-        <label for="f-email">Kontakt-e-post *</label>
-        <input id="f-email" type="email" placeholder="info@restaurangen.se" />
+        <label class="field__label" for="f-email">
+          Kontakt-e-post <span style="color:var(--muted);font-weight:400;text-transform:none">*</span>
+        </label>
+        <input class="input" id="f-email" type="email" placeholder="info@restaurangen.se" />
       </div>
       <div class="field">
-        <label for="f-plausible">Plausible-domän <span style="color:var(--text-3);font-weight:400;text-transform:none">(valfri)</span></label>
-        <input id="f-plausible" placeholder="restaurangen.se" />
-        <div class="hint">Lämna tomt om Plausible inte används</div>
+        <label class="field__label" for="f-plausible">
+          Plausible-domän <span style="color:var(--muted);font-weight:400;text-transform:none">(valfri)</span>
+        </label>
+        <input class="input" id="f-plausible" placeholder="restaurangen.se" />
+        <div class="field__hint">Lämna tomt om Plausible inte används</div>
       </div>
-      <div class="modal-error" id="modal-err"></div>
+      <div class="field__error" id="modal-err"></div>
     </div>
 
-    <div class="modal-footer" id="modal-footer-1">
-      <button class="btn-secondary" onclick="closeModal()">Avbryt</button>
-      <button class="btn-primary" id="btn-next" onclick="goToStep2()" disabled>Välj detta konto</button>
+    <div class="dialog__footer" id="modal-footer-1">
+      <button class="btn btn--secondary" onclick="closeModal()">Avbryt</button>
+      <button class="btn btn--primary" id="btn-next" onclick="goToStep2()" disabled>Välj detta konto</button>
     </div>
-    <div class="modal-footer" id="modal-footer-2" style="display:none">
-      <button class="btn-secondary" onclick="goToStep1()">← Tillbaka</button>
-      <button class="btn-primary" onclick="addCustomer()">Spara kund</button>
+    <div class="dialog__footer" id="modal-footer-2" style="display:none">
+      <button class="btn btn--secondary" onclick="goToStep1()">← Tillbaka</button>
+      <button class="btn btn--primary" onclick="addCustomer()">Spara kund</button>
     </div>
   </div>
 </div>
 
-<div id="toast" role="alert" aria-live="assertive"></div>
+<div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 
 <script>
 const MONTH_SV = ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Aug','Sep','Okt','Nov','Dec'];
 
-let allCustomers = [];
-let months = [];
-let logs   = {};
-let allBrands = [];
+let allCustomers  = [];
+let months        = [];
+let logs          = {};
+let allBrands     = [];
 let selectedBrand = null;
-let sortAsc = true;
+let sortAsc       = true;
+let statusFilter  = 'all';
 
 async function load() {
   const [custRes, statusRes] = await Promise.all([
@@ -482,6 +190,21 @@ async function load() {
   months = status.months;
   logs   = status.logs;
   renderAll();
+}
+
+/* Return the most-recent-month delivery status for a customer */
+function getCustomerStatus(customerId) {
+  if (!months.length) return 'future';
+  const m   = months[0];
+  const now = new Date();
+  const isFuture = m.year > now.getFullYear() ||
+    (m.year === now.getFullYear() && m.month > now.getMonth() + 1);
+  const delivered = logs[m.key]?.delivered ?? [];
+  const failed    = logs[m.key]?.failed    ?? [];
+  if (delivered.includes(customerId)) return 'ok';
+  if (failed.includes(customerId))    return 'fail';
+  if (isFuture)                       return 'future';
+  return 'pending';
 }
 
 function getFiltered() {
@@ -495,7 +218,9 @@ function getFiltered() {
       filter === 'all' ||
       (filter === 'active'   &&  c.active) ||
       (filter === 'inactive' && !c.active);
-    return matchSearch && matchFilter;
+    const matchStatus =
+      statusFilter === 'all' || getCustomerStatus(c.id) === statusFilter;
+    return matchSearch && matchFilter && matchStatus;
   });
 }
 
@@ -518,39 +243,44 @@ function renderAll() {
 
   customers.forEach(c => {
     const tr = document.createElement('tr');
+    const id = esc(c.id);
 
+    /* Customer name + slug */
     tr.innerHTML += `<td>
-      <div class="customer-name">${esc(c.name)}</div>
-      <div class="customer-slug">${esc(c.id)}</div>
+      <div class="customer__name">${esc(c.name)}</div>
+      <div class="customer__slug">${esc(c.id)}</div>
     </td>`;
 
+    /* Email inline edit */
     tr.innerHTML += `<td class="col-hide-sm">
       <div class="email-cell">
-        <span class="email-text" id="et-${esc(c.id)}">${esc(c.contact_email || '—')}</span>
-        <button class="email-edit-btn" onclick="startEditEmail('${esc(c.id)}')"
+        <span class="email-cell__text" id="et-${id}">${esc(c.contact_email || '—')}</span>
+        <button class="btn--icon email-cell__edit" onclick="startEditEmail('${id}')"
           aria-label="Redigera e-post för ${esc(c.name)}">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M11 2l3 3-8 8H3v-3l8-8z"/>
           </svg>
         </button>
-        <input class="email-input" id="ei-${esc(c.id)}" value="${esc(c.contact_email || '')}"
-          onkeydown="if(event.key==='Enter')saveEmail('${esc(c.id)}');if(event.key==='Escape')cancelEditEmail('${esc(c.id)}')"
-          onblur="saveEmail('${esc(c.id)}')"
+        <input class="email-cell__input" id="ei-${id}" value="${esc(c.contact_email || '')}"
+          onkeydown="if(event.key==='Enter')saveEmail('${id}');if(event.key==='Escape')cancelEditEmail('${id}')"
+          onblur="saveEmail('${id}')"
           aria-label="E-post för ${esc(c.name)}" />
-        <button class="email-save-btn" id="es-${esc(c.id)}" onclick="saveEmail('${esc(c.id)}')">Spara</button>
+        <button class="email-cell__save" id="es-${id}" onclick="saveEmail('${id}')">Spara</button>
       </div>
     </td>`;
 
+    /* Active toggle */
     tr.innerHTML += `<td>
-      <button class="active-pill ${c.active ? 'on' : 'off'}"
-        data-id="${esc(c.id)}" data-active="${c.active}"
+      <button class="toggle-pill ${c.active ? 'toggle-pill--on' : 'toggle-pill--off'}"
+        data-id="${id}" data-active="${c.active}"
         onclick="toggleActive(this)"
         aria-pressed="${c.active}"
-        aria-label="${c.active ? 'Aktiv' : 'Inaktiv'}">
-        ${c.active ? 'Aktiv' : 'Inaktiv'}
+        aria-label="${c.active ? 'Aktiv – klicka för att inaktivera' : 'Inaktiv – klicka för att aktivera'}">
+        <span class="toggle-pill__dot"></span>${c.active ? 'Aktiv' : 'Inaktiv'}
       </button>
     </td>`;
 
+    /* Monthly status badges */
     months.forEach((m, i) => {
       const delivered = logs[m.key]?.delivered ?? [];
       const failed    = logs[m.key]?.failed    ?? [];
@@ -558,16 +288,16 @@ function renderAll() {
       const isFuture = m.year > now.getFullYear() ||
         (m.year === now.getFullYear() && m.month > now.getMonth() + 1);
 
-      const colCls = i >= 3 ? 'month-col col-hide-md' : 'month-col';
+      const colCls = i >= 3 ? 'td--center col-hide-md' : 'td--center';
       let cell;
       if (delivered.includes(c.id)) {
-        cell = `<span class="status-pill ok" role="status" aria-label="Levererad">Klar</span>`;
+        cell = `<span class="badge badge--ok" role="status" aria-label="Levererad"><span class="badge__dot"></span>Klar</span>`;
       } else if (failed.includes(c.id)) {
-        cell = `<span class="status-pill fail" role="status" aria-label="Misslyckad">Fel</span>`;
+        cell = `<span class="badge badge--fail" role="status" aria-label="Misslyckad"><span class="badge__dot"></span>Fel</span>`;
       } else if (isFuture) {
-        cell = `<span class="status-dash" role="status" aria-label="Framtida">—</span>`;
+        cell = `<span class="badge badge--future" role="status" aria-label="Framtida">—</span>`;
       } else {
-        cell = `<span class="status-pill pending" role="status" aria-label="Väntar">Väntar</span>`;
+        cell = `<span class="badge badge--pending" role="status" aria-label="Väntar"><span class="badge__dot"></span>Väntar</span>`;
       }
       tr.innerHTML += `<td class="${colCls}">${cell}</td>`;
     });
@@ -576,6 +306,7 @@ function renderAll() {
   });
 }
 
+/* ── Sorting ─────────────────────────────────── */
 function sortByName() {
   sortAsc = !sortAsc;
   allCustomers.sort((a, b) =>
@@ -585,6 +316,16 @@ function sortByName() {
   renderAll();
 }
 
+/* ── Status chip filter ──────────────────────── */
+function setStatusFilter(status) {
+  statusFilter = status;
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.status === status);
+  });
+  renderAll();
+}
+
+/* ── Inline email edit ───────────────────────── */
 function startEditEmail(id) {
   document.getElementById('et-' + id).style.display = 'none';
   const input = document.getElementById('ei-' + id);
@@ -623,6 +364,7 @@ async function saveEmail(id) {
   }
 }
 
+/* ── Active toggle ───────────────────────────── */
 async function toggleActive(btn) {
   const id     = btn.dataset.id;
   const active = btn.dataset.active !== 'true';
@@ -635,10 +377,10 @@ async function toggleActive(btn) {
     const c = allCustomers.find(c => c.id === id);
     if (c) c.active = active;
     btn.dataset.active = String(active);
-    btn.className = 'active-pill ' + (active ? 'on' : 'off');
+    btn.className = 'toggle-pill ' + (active ? 'toggle-pill--on' : 'toggle-pill--off');
     btn.setAttribute('aria-pressed', String(active));
-    btn.setAttribute('aria-label', active ? 'Aktiv' : 'Inaktiv');
-    btn.textContent = active ? 'Aktiv' : 'Inaktiv';
+    btn.setAttribute('aria-label', active ? 'Aktiv – klicka för att inaktivera' : 'Inaktiv – klicka för att aktivera');
+    btn.innerHTML = `<span class="toggle-pill__dot"></span>${active ? 'Aktiv' : 'Inaktiv'}`;
     renderAll();
     toast(active ? 'Kund aktiverad' : 'Kund inaktiverad');
   } else {
@@ -646,45 +388,67 @@ async function toggleActive(btn) {
   }
 }
 
+/* ── Modal ───────────────────────────────────── */
+function onModalKeydown(event) {
+  if (event.key === 'Escape') { closeModal(); return; }
+  if (event.key !== 'Tab') return;
+  const focusable = document.getElementById('dialog').querySelectorAll(
+    'button:not([disabled]), input:not([disabled]), select, [tabindex]:not([tabindex="-1"])'
+  );
+  const first = focusable[0];
+  const last  = focusable[focusable.length - 1];
+  if (event.shiftKey) {
+    if (document.activeElement === first) { event.preventDefault(); last.focus(); }
+  } else {
+    if (document.activeElement === last)  { event.preventDefault(); first.focus(); }
+  }
+}
+
 function openModal() {
   selectedBrand = null;
   document.getElementById('overlay').classList.add('open');
+  document.addEventListener('keydown', onModalKeydown);
   goToStep1();
   fetchBrands();
 }
 
 function closeModal() {
   document.getElementById('overlay').classList.remove('open');
-  document.getElementById('f-email').value = '';
+  document.removeEventListener('keydown', onModalKeydown);
+  document.getElementById('f-email').value    = '';
   document.getElementById('f-plausible').value = '';
   document.getElementById('modal-err').style.display = 'none';
   document.getElementById('brand-search').value = '';
 }
 
 function goToStep1() {
-  document.getElementById('step1').style.display = '';
-  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step1').style.display         = '';
+  document.getElementById('step2').style.display         = 'none';
   document.getElementById('modal-footer-1').style.display = '';
   document.getElementById('modal-footer-2').style.display = 'none';
-  document.getElementById('step-label').textContent = 'Steg 1 av 2 — Välj Metricool-konto';
+  document.getElementById('step-label').textContent      = 'Steg 1 av 2 — Välj Metricool-konto';
+  document.getElementById('progress-bar').style.width    = '50%';
   selectedBrand = null;
   document.getElementById('btn-next').disabled = true;
   filterBrands();
+  document.getElementById('brand-search').focus();
 }
 
 function goToStep2() {
   if (!selectedBrand) return;
-  document.getElementById('step1').style.display = 'none';
-  document.getElementById('step2').style.display = '';
+  document.getElementById('step1').style.display         = 'none';
+  document.getElementById('step2').style.display         = '';
   document.getElementById('modal-footer-1').style.display = 'none';
   document.getElementById('modal-footer-2').style.display = '';
-  document.getElementById('step-label').textContent = 'Steg 2 av 2 — Kontaktuppgifter';
+  document.getElementById('step-label').textContent      = 'Steg 2 av 2 — Kontaktuppgifter';
+  document.getElementById('progress-bar').style.width    = '100%';
   document.getElementById('sbi-name').textContent = selectedBrand.label;
   document.getElementById('sbi-id').textContent   = `Brand ID: ${selectedBrand.id}`;
   document.getElementById('f-name').value         = selectedBrand.label;
   document.getElementById('f-email').focus();
 }
 
+/* ── Brand browser ───────────────────────────── */
 async function fetchBrands() {
   const list = document.getElementById('brand-list');
   list.innerHTML = '<div class="brand-loading">Hämtar konton från Metricool…</div>';
@@ -716,14 +480,15 @@ function renderBrands(brands) {
   list.innerHTML = brands.map(b => {
     const nets = Object.entries(NET_ICONS)
       .filter(([k]) => b[k])
-      .map(([, icon]) => `<span class="net-icon" aria-hidden="true">${icon}</span>`)
+      .map(([, icon]) => `<span class="brand-item__net-icon" aria-hidden="true">${icon}</span>`)
       .join('');
-    return `<div class="brand-item${b.already_added ? ' already' : ''}" role="option"
+    const cls = b.already_added ? 'brand-item brand-item--added' : 'brand-item';
+    return `<div class="${cls}" role="option"
       data-id="${esc(b.id)}" onclick="selectBrand('${esc(b.id)}')"
       aria-selected="false" ${b.already_added ? 'aria-disabled="true"' : ''}>
-      <span class="brand-item-name">${esc(b.label)}</span>
-      <span class="brand-item-nets">${nets}</span>
-      ${b.already_added ? '<span class="brand-item-badge">Tillagd</span>' : ''}
+      <span class="brand-item__name">${esc(b.label)}</span>
+      <span class="brand-item__nets">${nets}</span>
+      ${b.already_added ? '<span class="brand-item__badge">Tillagd</span>' : ''}
     </div>`;
   }).join('');
 }
@@ -733,12 +498,14 @@ function selectBrand(id) {
   if (!brand || brand.already_added) return;
   selectedBrand = brand;
   document.querySelectorAll('.brand-item').forEach(el => {
-    el.classList.toggle('selected', el.dataset.id === id);
-    el.setAttribute('aria-selected', String(el.dataset.id === id));
+    const sel = el.dataset.id === id;
+    el.classList.toggle('brand-item--selected', sel);
+    el.setAttribute('aria-selected', String(sel));
   });
   document.getElementById('btn-next').disabled = false;
 }
 
+/* ── Add customer ────────────────────────────── */
 async function addCustomer() {
   const errEl = document.getElementById('modal-err');
   if (!selectedBrand) return;
@@ -765,19 +532,22 @@ async function addCustomer() {
   }
 }
 
+/* ── Toast ───────────────────────────────────── */
 function toast(msg, isError = false) {
   const el = document.getElementById('toast');
   el.textContent = msg;
-  el.className = isError ? 'error' : '';
+  el.className = 'toast' + (isError ? ' toast--error' : '');
   el.style.display = 'block';
   setTimeout(() => { el.style.display = 'none'; }, 3000);
 }
 
+/* ── XSS escape ──────────────────────────────── */
 function esc(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-document.getElementById('search').addEventListener('input', renderAll);
+/* ── Event listeners ─────────────────────────── */
+document.getElementById('search').addEventListener('input',  renderAll);
 document.getElementById('filter').addEventListener('change', renderAll);
 document.getElementById('overlay').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeModal();

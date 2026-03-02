@@ -19,6 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use('/styles', express.static(path.join(TEMPLATES_DIR, 'styles')));
 
 // ── Auth middleware ───────────────────────────────────────
 function requireAuth(req, res, next) {
