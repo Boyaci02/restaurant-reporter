@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { runReport } from './reportRunner.js';
 import { createLogger } from './logger.js';
+import { startDashboard } from './dashboard.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CUSTOMERS_PATH = path.join(__dirname, '..', 'data', 'customers.json');
@@ -72,6 +73,9 @@ if (args.includes('--now')) {
   await runMonthlyReports(now.getMonth() + 1, now.getFullYear());
   process.exit(0);
 }
+
+// ── Dashboard ─────────────────────────────────────────────
+startDashboard();
 
 // ── Monthly cron: 08:00 on the last day of every month ──
 logger.info('Restaurant Reporter started – waiting for scheduled run (08:00 on last day of month)');

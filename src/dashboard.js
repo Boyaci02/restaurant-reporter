@@ -116,6 +116,13 @@ app.get('/api/status', requireAuth, async (_req, res) => {
   res.json({ months, logs });
 });
 
-app.listen(PORT, () => {
-  console.log(`Dashboard körs på http://localhost:${PORT}`);
-});
+export function startDashboard() {
+  app.listen(PORT, () => {
+    console.log(`Dashboard körs på http://localhost:${PORT}`);
+  });
+}
+
+// Allow running standalone: node src/dashboard.js
+if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  startDashboard();
+}
